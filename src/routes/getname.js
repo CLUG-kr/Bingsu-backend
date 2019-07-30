@@ -1,6 +1,6 @@
 const {Teammate} = require('../../database/models');
 
-module.exports = (ctx, next) => {
+module.exports = async (ctx, next) => {
     let teams = ctx.user.getTeams(),
         query = ctx.params.stdno;
     for(let team of teams) {

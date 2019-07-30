@@ -32,7 +32,7 @@ router.use('/team', authenticator.authorize, teamMiddleware, teamRouter.routes()
 router.use('/todo', authenticator.authorize, teamMiddleware, todoRouter.routes(), todoRouter.allowedMethods());
 router.use('/chat', authenticator.authorize, teamMiddleware, chatRouter.routes(), chatRouter.allowedMethods());
 router.use('/invitations', authenticator.authorize, teamMiddleware, invitationsRouter.routes(), invitationsRouter.allowedMethods());
-router.get('/getname', authenticator.authroize, teamMiddleware, )
+router.get('/getname', authenticator.authorize, teamMiddleware, require('./getname'));
 router.use(async (ctx, next) => {
     if (ctx.result) {
         ctx.status = 200;
