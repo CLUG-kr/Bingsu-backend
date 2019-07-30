@@ -11,8 +11,11 @@ npx sequelize db:migrate
 ```
 
 ## Usage
-Before start, you have to set NODE_ENV environment variable `production` or `development`.
+Before start, you have to set NODE_ENV environment variable `production` or `development`, and write config file(`/config/dev.json` or `/config/production.json`)
 
 ```
 npm run start
 ```
+
+## API
+See wiki
