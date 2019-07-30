@@ -1,6 +1,4 @@
 {
-    "googleClientId": "762862471121-i6db7mklnn1a6dja5sjjrsb0hvqvv0eu.apps.googleusercontent.com",
-    "googleClientSecret": "8pGQvBeMRJbxbNCzdIEvatea",
     "jwtSecret": "AIWSEgnapIWetgbnA23FMNAWOP4GNMAEPTHRNPSERGNMPAO9WR4JMG0OPW",
     "httpPort": 8081,
     "pinShtm": 1

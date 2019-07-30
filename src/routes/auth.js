@@ -1,5 +1,5 @@
 const Router = require('koa-router'),
-      {Freetime} = require('../../database/models'),
+      {Freetime, User} = require('../../database/models'),
       bodyParser = require('koa-bodyparser'),
       Authenticator = require('../auth'),
       Cau = require('../cau'),
@@ -20,12 +20,17 @@ router.post('/login', bodyParser({enableTypes: ['json']}), async (ctx, next) => 
     let cau = new Cau();
     await cau.login(id, password);
 
+    // save name
+    let {stdno, kornm} = (await cau.getInfo()).loginInfo;
+    if(await User.findOne({stdno: stdno}) == null)
+        await User.create({stdno: stdno, name: kornm})
+
     // create token
     let jwt = await authenticator.createToken(cau);
     ctx.result = {token: jwt};
 
     // get timetable
-    let {stdno, curyear, curshtm} = (await cau.getInfo()).loginInfo;
+    let {curyear, curshtm} = (await cau.getInfo()).loginInfo;
     if (config.pinShtm)
         curshtm = config.pinShtm;
     if(await Freetime.findOne({where:{stdno, year: curyear, shtm: curshtm}}) ==  null) {

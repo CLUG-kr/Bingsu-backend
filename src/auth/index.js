@@ -8,12 +8,12 @@ module.exports = function () {
      * @param {string} cau authenticated cau object
      */
     this.createToken = async (cau) => {
-        let {stdno, userNm} = await cau.getInfo();
+        let {stdno, kornm} = await cau.getInfo();
         let {curyear, curshtm} = (await cau.getInfo()).loginInfo;
         return jwt.sign({
             "exp": Math.floor(Date.now() / 1000) + 60 * 60 * 3, // 3hr
             "aud": stdno,
-            "name@bingsu": userNm,
+            "name@bingsu": kornm,
             "year@bingsu": curyear,
             "shtm@bingsu": curshtm
         }, _jwtSecret);
