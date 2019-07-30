@@ -6,7 +6,6 @@ module.exports = function () {
             blocks[i].push(true);
     }
     function parseClassTimeString(str) {
-        console.log(str);
         let matches = /([0-9]{2}):([0-9]{2})/.exec(str);
         let hours = Number(matches[1]), minutes = Number(matches[2]);
         return {hours, minutes}

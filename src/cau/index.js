@@ -9,9 +9,12 @@ function Cau() {
     this.getInfo = async function () {
         return await require('./getInfo')(jar);
     }
-    this.getTimetable = async function() {
-        let {curyear, curshtm, stdno, campcd} = (await this.getInfo()).loginInfo;
-        return await require('./timetables')(jar, {year: curyear, shtm: curshtm, stdno, campcd});
+    this.getTimetable = async function(params) {
+        let info = (await this.getInfo()).loginInfo;
+        if (params)
+            for(let i in params)
+                info[i] = params[i];
+        return await require('./timetables')(jar, {year: info.curyear, shtm: info.curshtm, stdno: info.stdno, campcd: info.campcd});
     }
 }
 

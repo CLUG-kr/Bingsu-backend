@@ -29,7 +29,7 @@ router.post('/login', bodyParser({enableTypes: ['json']}), async (ctx, next) => 
     if (config.pinShtm)
         curshtm = config.pinShtm;
     if(await Freetime.findOne({where:{stdno, year: curyear, shtm: curshtm}}) ==  null) {
-        let timetable = await cau.getTimetable();
+        let timetable = config.pinShtm ? await cau.getTimetable({curshtm : config.pinShtm}) : await cau.getTimetable();
         let allFree = true;
         for(let i of timetable) {
             // from, until, days
