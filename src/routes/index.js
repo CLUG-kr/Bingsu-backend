@@ -16,7 +16,7 @@ router.use(async (ctx, next) => {
         await next();
     } catch (err) {
         ctx.type = 'application/json';
-        if (err.constructor.name == 'APIError') {
+        if (err.constructor === APIError) {
             ctx.status = err.status || 500;
             ctx.body = JSON.stringify({success: false, error: {message: err.message || ''}});
         } else {
