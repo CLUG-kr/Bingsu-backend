@@ -22,8 +22,12 @@ module.exports = function () {
 
     // middleware
     this.authenticate = async (ctx, next) => {
-        if (ctx.request.headers["authorization"] && ctx.request.headers["authorization"].startsWith('Bearer')) {
-            let tokenString = ctx.request.headers["authorization"].substring(7);
+        let tokenString = null;
+        if (ctx.request.headers["authorization"] && ctx.request.headers["authorization"].startsWith('Bearer'))
+            tokenString = ctx.request.headers["authorization"].substring(7);
+        else if(ctx.cookies.get('token'))
+            tokenString = ctx.cookies.get('token');
+        if (tokenString) {
             let token = jwt.verify(tokenString, _jwtSecret);
             ctx.user = {
                 stdno: token.aud,

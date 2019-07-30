@@ -29,6 +29,10 @@ router.post('/login', bodyParser({enableTypes: ['json']}), async (ctx, next) => 
     let jwt = await authenticator.createToken(cau);
     ctx.result = {token: jwt};
 
+    // set cookie if needed
+    if (ctx.request.body.setCookies === true)
+        ctx.cookies.set('token', jwt);
+
     // get timetable
     let {curyear, curshtm} = (await cau.getInfo()).loginInfo;
     if (config.pinShtm)
