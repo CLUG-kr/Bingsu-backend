@@ -27,10 +27,11 @@ router.get('/toggle/:id', async (ctx, next) => {
     await next();
 });
 router.post('/create', bodyParser({enableTypes: ['json']}), async (ctx, next) => {
-    let {name, teamId} = ctx.request.body;
+    let {name, teamId, deadline} = ctx.request.body;
     let todo = await Todo.create({
         teamId,
         name,
+        deadline: new Date(deadline),
         stdno: ctx.user.stdno
     });
     ctx.result = todo.id;

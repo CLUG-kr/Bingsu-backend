@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     teamId: DataTypes.INTEGER,
     stdno: DataTypes.INTEGER,
     name: DataTypes.STRING,
+    deadline: DataTypes.DATE,
     checked: {type: DataTypes.BOOLEAN, defaultValue: false}
   }, {});
   Todo.associate = function(models) {

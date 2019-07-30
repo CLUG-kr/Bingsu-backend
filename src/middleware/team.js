@@ -7,7 +7,7 @@ module.exports = async function (ctx, next) {
         for(let i of teamIds)
             if (!teamIds.map(j => j.id).includes(i))
                 result.push(await Team.findByPk(i));
-        result = result.map(i => {return {id:i.id, name:i.name, deadline: i.deadline}})
+        result = result.map(i => {return {id:i.id, name:i.name}})
         return result;
     };
     ctx.user.isInTeam = async function (id) {

@@ -9,10 +9,9 @@ router.get('/', async (ctx, next) => {
     await next();
 });
 router.post('/', bodyParser({enableTypes: ['json']}), async (ctx, next) => {
-    let {name, deadline} = ctx.request.body;
+    let {name} = ctx.request.body;
     let team = await Team.create({
         name,
-        deadline: new Date(deadline),
         leader: ctx.user.stdno
     });
     await Teammate.create({
@@ -33,7 +32,6 @@ router.use('/:team', async (ctx, next) => {
                 id: team.id,
                 name: team.name,
                 teammates,
-                deadline: team.deadline,
                 leader: team.leader
             };
             ctx.user.isLeader = leader == ctx.user.stdno;

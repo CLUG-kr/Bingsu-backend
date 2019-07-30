@@ -11,6 +11,9 @@ module.exports = {
       teamId: {
         type: Sequelize.INTEGER
       },
+      deadline: {
+        type: Sequelize.DATE
+      },
       stdno: {
         type: Sequelize.INTEGER
       },
