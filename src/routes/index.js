@@ -1,7 +1,10 @@
 const Router = require('koa-router'),
       Authenticator = require('../auth'),
+      teamMiddleware = require('../middleware/team'),
       authRouter = require('./auth'),
       teamRouter = require('./team'),
+      todoRouter = require('./todo'),
+      invitationsRouter = require('./invitations.js')
       authenticator = new Authenticator(),
       router = new Router();
 
@@ -24,7 +27,9 @@ router.use(async (ctx, next) => {
 })
 router.use(authenticator.authenticate);
 router.use('/auth', authRouter.routes(), authRouter.allowedMethods());
-router.use('/team', authenticator.authorize, teamRouter.routes(), teamRouter.allowedMethods());
+router.use('/team', authenticator.authorize, teamMiddleware, teamRouter.routes(), teamRouter.allowedMethods());
+router.use('/todo', authenticator.authorize, teamMiddleware, todoRouter.routes(), todoRouter.allowedMethods());
+router.use('/invitations', authenticator.authorize, teamMiddleware, invitationsRouter.routes(), invitationsRouter.allowedMethods());
 router.use(async (ctx, next) => {
     if (ctx.result) {
         ctx.status = 200;

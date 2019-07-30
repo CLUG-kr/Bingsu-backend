@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     from: DataTypes.DATE,
     until: DataTypes.DATE,
     teamId: DataTypes.INTEGER,
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    place: DataTypes.STRING
   }, {});
   Meeting.associate = function(models) {
     // associations can be defined here

@@ -9,11 +9,11 @@ const Router = require('koa-router'),
 router.post('/login', bodyParser({enableTypes: ['json']}), async (ctx, next) => {
     // validate body
     if (typeof ctx.request.body.id !== 'string')
-        throw new APIError('Id not present');
+        throw new APIError('포탈 ID를 입력해주세요.');
     else if (typeof ctx.request.body.password !== 'string')
-        throw new APIError('Password not present');
+        throw new APIError('포탈 비밀번호를 입력해주세요.');
     else if(ctx.user)
-        throw new APIError('Already authenticated');
+        throw new APIError('이미 로그인했습니다.');
 
     // login portal
     const {id, password} = ctx.request.body;
@@ -26,19 +26,20 @@ router.post('/login', bodyParser({enableTypes: ['json']}), async (ctx, next) => 
 
     // get timetable
     let {stdno, curyear, curshtm} = (await cau.getInfo()).loginInfo;
+    if (config.pinShtm)
+        curshtm = config.pinShtm;
     if(await Freetime.findOne({where:{stdno, year: curyear, shtm: curshtm}}) ==  null) {
         let timetable = await cau.getTimetable();
         let allFree = true;
         for(let i of timetable) {
-            console.log(i)
             // from, until, days
             let {from, until} = i;
-            for(let i = 0; i < 6; i++)
-                if (i.days[i]) {
+            for(let j = 0; j < 6; j++)
+                if (i.days[j]) {
                     await Freetime.create({
                         from,
                         until,
-                        day: i,
+                        day: j,
                         year: curyear,
                         shtm: curshtm,
                         stdno
