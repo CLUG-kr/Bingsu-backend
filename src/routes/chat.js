@@ -1,10 +1,10 @@
 const Router = require('koa-router'),
       bodyParser = require('koa-bodyparser'),
       {Op} = require('sequelize'),
-      {Message, MessageRead} = require('../../database/models'),
+      {Message, MessageRead, Teammate} = require('../../database/models'),
       router = new Router();
 
-router.get('/:id/read', async (ctx, next) => {
+router.get('/:id/mark_as_read', async (ctx, next) => {
     if (!ctx.user.isInTeam(ctx.params.id))
         throw new APIError('당신의 팀이 아닙니다.');
     let messageRead = await MessageRead.findOne({where:{stdno: ctx.user.stdno,teamId: ctx.params.id}});
@@ -23,6 +23,8 @@ router.get('/:id/read', async (ctx, next) => {
     await next();
 });
 router.get('/:id/get', async (ctx, next) => {
+    if (!ctx.user.isInTeam(ctx.params.id))
+        throw new APIError('당신의 팀이 아닙니다.');
     let from = null, until = null, limit = 30;
     if (ctx.request.query.from)
         from = new Date(ctx.request.query.from);
@@ -33,7 +35,6 @@ router.get('/:id/get', async (ctx, next) => {
     
     let filter = {
         where: {
-            stdno: ctx.user.stdno,
             teamId: ctx.params.id
         },
         limit
@@ -43,13 +44,23 @@ router.get('/:id/get', async (ctx, next) => {
     if (until) filter.where.timestamp[Op.lte] = until.getTime();
 
     let messages = await Message.findAll(filter);
-    messages = messages.map(i => {
-        return {
+    ctx.result = [];
+    for(let i of messages) {
+        let unreads = (await Teammate.findAll({where: {teamId: ctx.params.id}})).map(i => i.stdno), reads = [];
+        for(let i of unreads) {
+            let readMarker = await MessageRead.findOne({stdno: i, teamId: ctx.params.id});
+            if (readMarker !== null && readMarker.readUntil >= messages[messages.length - 1].timestamp) {
+                unreads.splice(unreads.indexOf(i), 1);
+                reads.push(i);
+            }
+        }
+        ctx.result.push({
             message: i.message,
-            stdno: i.stdno
-        };
-    })
-    ctx.result = messages;
+            stdno: i.stdno,
+            unreads,
+            reads
+        });
+    }
     await next();
 });
 router.post('/:id/send', bodyParser({enableTypes: ['json']}), async (ctx, next) => {
