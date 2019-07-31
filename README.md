@@ -16,3 +16,6 @@ Before start, you have to set NODE_ENV environment variable `production` or `dev
 ```
 npm run start
 ```
+
+## API
+See wiki
