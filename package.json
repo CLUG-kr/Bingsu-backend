@@ -17,7 +17,7 @@
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "mariadb": "^2.1.0",
-    "sequelize": "^5.11.0",
+    "sequelize": "^5.15.1",
     "sqlite3": "^4.0.9"
   }
 }
